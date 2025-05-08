@@ -43,12 +43,12 @@ export default function LandingPage() {
               variant='ghost'
               size='sm'
               asChild>
-              <Link href='/login'>Login</Link>
+              <Link href='/'>Login</Link>
             </Button>
             <Button
               size='sm'
               asChild>
-              <Link href='/register'>Sign Up Free</Link>
+              <Link href='/'>Sign Up Free</Link>
             </Button>
           </div>
         </div>
@@ -156,7 +156,7 @@ export default function LandingPage() {
               <Button
                 size='lg'
                 asChild>
-                <Link href='/register'>
+                <Link href='/'>
                   Get Started Free
                   <ArrowRight className='ml-2 h-4 w-4' />
                 </Link>
@@ -165,7 +165,7 @@ export default function LandingPage() {
                 size='lg'
                 variant='outline'
                 asChild>
-                <Link href='/demo'>View Full Demo</Link>
+                <Link href='/'>View Full Demo</Link>
               </Button>
             </div>
           </div>
