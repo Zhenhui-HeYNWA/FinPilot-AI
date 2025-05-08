@@ -1,4 +1,4 @@
-// postcss.config.js (ESM)
+// postcss.config.js
 module.exports = {
   plugins: {
     tailwindcss: {},
