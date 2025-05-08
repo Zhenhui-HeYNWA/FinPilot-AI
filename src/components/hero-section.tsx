@@ -22,7 +22,7 @@ export function HeroSection() {
           <Button
             size='lg'
             asChild>
-            <Link href='/register'>
+            <Link href='/'>
               Get Started Free
               <ArrowRight className='ml-2 h-4 w-4' />
             </Link>
