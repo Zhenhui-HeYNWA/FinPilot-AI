@@ -15,6 +15,9 @@ export const theme = {
     },
   },
   extend: {
+    borderColor: {
+      border: 'hsl(var(--border))',
+    },
     colors: {
       border: 'hsl(var(--border))',
       input: 'hsl(var(--input))',
@@ -71,6 +74,6 @@ export const theme = {
     },
   },
 };
-import tailwindcssAnimate from 'tailwindcss-animate'
+import tailwindcssAnimate from 'tailwindcss-animate';
 
 export const plugins = [tailwindcssAnimate];
