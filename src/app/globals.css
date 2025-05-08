@@ -85,7 +85,7 @@
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-ot;
   }
   body {
     @apply bg-background text-foreground;

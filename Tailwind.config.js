@@ -16,7 +16,7 @@ export const theme = {
   },
   extend: {
     borderColor: {
-      border: 'hsl(var(--border))',
+      ot: 'hsl(var(--border))',
     },
     colors: {
       border: 'hsl(var(--border))',
