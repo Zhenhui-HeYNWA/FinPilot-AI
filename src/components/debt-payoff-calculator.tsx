@@ -183,7 +183,7 @@ export function DebtPayoffCalculator() {
 
   return (
     <div className='grid gap-6 md:grid-cols-2'>
-      <Card className='md:max-w-[500px] max-w-[365px] '>
+      <Card className='md:max-w-[500px] max-w-[370px] '>
         <CardHeader>
           <CardTitle>Debt Payoff Calculator</CardTitle>
           <CardDescription>
@@ -319,7 +319,7 @@ export function DebtPayoffCalculator() {
         </CardFooter>
       </Card>
 
-      <Card className='md:max-w-[500px] max-w-[365px] '>
+      <Card className='md:max-w-[500px] max-w-[370px] '>
         <CardHeader>
           <CardTitle>Debt Payoff Projection</CardTitle>
           <CardDescription>

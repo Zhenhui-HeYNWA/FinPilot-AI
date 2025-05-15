@@ -14,46 +14,6 @@ import { DebtPayoffCalculator } from '@/components/debt-payoff-calculator';
 export default function LandingPage() {
   return (
     <div className='flex min-h-screen flex-col '>
-      {/* 导航栏 */}
-      <header className='sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60'>
-        <div className='container flex h-16 items-center justify-between'>
-          <div className='flex items-center gap-2'>
-            <PiggyBank className='h-6 w-6 text-primary' />
-            <span className='text-xl font-bold'>Finpilot</span>
-          </div>
-          <nav className='hidden md:flex gap-6'>
-            <Link
-              href='#features'
-              className='text-sm font-medium text-muted-foreground transition-colors hover:text-primary'>
-              Features
-            </Link>
-            <Link
-              href='#demo'
-              className='text-sm font-medium text-muted-foreground transition-colors hover:text-primary'>
-              Demo
-            </Link>
-            <Link
-              href='#explore'
-              className='text-sm font-medium text-muted-foreground transition-colors hover:text-primary'>
-              Explore
-            </Link>
-          </nav>
-          <div className='flex items-center gap-4'>
-            <Button
-              variant='ghost'
-              size='sm'
-              asChild>
-              <Link href='/'>Login</Link>
-            </Button>
-            <Button
-              size='sm'
-              asChild>
-              <Link href='/'>Sign Up Free</Link>
-            </Button>
-          </div>
-        </div>
-      </header>
-
       <main className='flex-1'>
         {/* Hero 部分 */}
         <HeroSection />

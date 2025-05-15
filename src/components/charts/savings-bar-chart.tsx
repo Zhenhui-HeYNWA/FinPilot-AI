@@ -31,7 +31,7 @@ export function SavingsBarChart({ data, monthsToGoal }: SavingsBarChartProps) {
   const chartEmpty = data.length === 0;
 
   return (
-    <Card className='md:max-w-[495px] max-w-[450px] '>
+    <Card className='md:max-w-[500px] max-w-[450px] '>
       <CardHeader>
         <CardTitle>Savings Projection</CardTitle>
         <CardDescription>
