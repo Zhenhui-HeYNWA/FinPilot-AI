@@ -20,7 +20,7 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { useGetIncomeHistory } from '@/hooks/useIncome';
 import { useGetExpenseHistory } from '@/hooks/useExpense';
-import { ChartContainer } from './ui/chart';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from './ui/chart';
 
 // 假设未来还有这些 Hook
 // import { useGetBalanceHistory } from '@/hooks/balance/use-get-balance-history';
@@ -64,20 +64,20 @@ export function AreaChartComponent({ type }: AreaChartComponentProps) {
   const balanceData = useMemo(() => {
     if (type !== 'balance') return [];
 
-    const incomeData = incomeQuery.data?.monthly ?? [];
+    const incomeData = incomeQuery.data?.range ?? [];
 
-    const expenseData = expenseQuery.data?.monthly ?? [];
+    const expenseData = expenseQuery.data?.range ?? [];
 
     return incomeData.map((item) => {
-      const expense = expenseData.find((e) => e.month === item.month);
+      const expense = expenseData.find((e) => e.range === item.range);
       return {
-        month: item.month,
+        range: item.range,
         total: Number(item.total - (expense?.total || 0)).toFixed(2),
       };
     });
   }, [incomeQuery.data, expenseQuery.data, type]);
   // const savingsQuery = useGetSavingsHistory({ range });
-
+  console.log('incomeData', incomeQuery.data);
   // 根据 type 选择对应的数据
   let selectedQuery;
   switch (type) {
@@ -87,20 +87,19 @@ export function AreaChartComponent({ type }: AreaChartComponentProps) {
     case 'expense':
       selectedQuery = expenseQuery;
       break;
-    // case 'balance':
-    //   selectedQuery = balanceQuery;
-    //   break;
-    // case 'savings':
-    //   selectedQuery = savingsQuery;
-    //   break;
+
+    case 'savings':
+      selectedQuery = expenseQuery;
+      break;
     default:
       selectedQuery = { data: null, isLoading: false, error: null };
   }
 
-  const data =
-    type === 'balance'
-      ? { monthly: balanceData }
+  const data = useMemo(() => {
+    return type === 'balance'
+      ? { range: balanceData }
       : (selectedQuery.data ?? { monthly: [] });
+  }, [type, balanceData, selectedQuery.data]);
 
   const isLoading =
     type === 'balance'
@@ -109,7 +108,7 @@ export function AreaChartComponent({ type }: AreaChartComponentProps) {
   const chartConfig = chartConfigMap[type];
 
   const yDomain = useMemo(() => {
-    const values = data?.monthly?.map((d) => Number(d.total)) ?? [];
+    const values = data?.range?.map((d) => Number(d.total)) ?? [];
     const max = Math.max(...values, 0);
     const min = Math.min(...values, 0);
     const padding = (max - min) * 0.1 || 10; // 最少给 10 的 buffer
@@ -144,7 +143,7 @@ export function AreaChartComponent({ type }: AreaChartComponentProps) {
           className='mt-4 w-full '>
           <AreaChart
             accessibilityLayer
-            data={data?.monthly || []}
+            data={data?.range || []}
             margin={{ left: 12, right: 0 }}
             height={400}>
             <CartesianGrid
@@ -152,7 +151,7 @@ export function AreaChartComponent({ type }: AreaChartComponentProps) {
               strokeDasharray='3 3'
             />
             <XAxis
-              dataKey='month'
+              dataKey='range'
               tickLine={false}
               axisLine={false}
               stroke='#888888'
@@ -165,7 +164,10 @@ export function AreaChartComponent({ type }: AreaChartComponentProps) {
               axisLine={false}
             />
 
-            <Tooltip />
+            <ChartTooltip
+              content={<ChartTooltipContent className=' capitalize' />}
+            />
+
             <Area
               dataKey='total'
               type='natural'

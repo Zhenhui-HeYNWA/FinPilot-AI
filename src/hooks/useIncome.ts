@@ -11,13 +11,13 @@ type IncomeRecord = {
   category: string;
 };
 
-type MonthlyIncome = {
-  month: string;
+type IncomeByRange = {
+  range: string;
   total: number;
 };
 type IncomeHistoryResult = {
   raw: IncomeRecord[];
-  monthly: MonthlyIncome[];
+  range: IncomeByRange[];
 };
 export function useGetIncome() {
   return useQuery({
@@ -29,26 +29,36 @@ export function useGetIncome() {
     },
   });
 }
-function processIncomeData(data: IncomeRecord[]): MonthlyIncome[] {
-  // 用一个 Map 存储按 'yyyy-MM' 格式分组的收入总和
+function processIncomeData(
+  data: IncomeRecord[],
+  range: rangeProps['range']
+): IncomeByRange[] {
   const grouped = new Map<string, number>();
 
   data.forEach((item) => {
     const dateObj = parseISO(item.date);
-    const yearMonth = format(dateObj, 'yyyy-MM'); // 用于排序的key
-    grouped.set(yearMonth, (grouped.get(yearMonth) || 0) + item.amount);
+
+    // ✅ 按不同粒度格式化
+    const key =
+      range === 'week'
+        ? format(dateObj, 'yyyy-MM-dd') // 每天一个 key
+        : format(dateObj, 'yyyy-MM'); // 每月一个 key
+
+    grouped.set(key, (grouped.get(key) || 0) + item.amount);
   });
 
-  // 按 'yyyy-MM' 进行升序排序
   const sortedEntries = Array.from(grouped.entries()).sort(([a], [b]) =>
     a > b ? 1 : a < b ? -1 : 0
   );
 
-  // 返回只包含 MMM 和 total 的数组
-  return sortedEntries.map(([yearMonth, total]) => {
-    const dateObj = parseISO(yearMonth + '-01'); // 构造一个日期对象方便格式化
+  return sortedEntries.map(([dateKey, total]) => {
+    const dateObj = parseISO(dateKey + (range === 'week' ? '' : '-01'));
     return {
-      month: format(dateObj, 'MMM'), // 只显示月份缩写
+      // 👇 使用 'EEE' + 全大写
+      range:
+        range === 'week'
+          ? format(dateObj, 'EEE').toUpperCase()
+          : format(dateObj, 'MMM'),
       total: Number(total.toFixed(2)),
     };
   });
@@ -61,8 +71,8 @@ export function useGetIncomeHistory({ range }: rangeProps) {
       const json = await res.json();
       if (!res.ok) throw new Error(json.message);
       const rawData: IncomeRecord[] = json.data;
-      const monthly = processIncomeData(rawData);
-      return { raw: rawData, monthly };
+      const rangeDetail = processIncomeData(rawData, range);
+      return { raw: rawData, range: rangeDetail };
     },
   });
 }

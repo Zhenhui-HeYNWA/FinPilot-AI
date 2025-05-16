@@ -11,23 +11,31 @@ type ExpenseRecord = {
   category: string;
 };
 
-type MonthlyExpense = {
-  month: string;
+type ExpenseByRange = {
+  range: string;
   total: number;
 };
 type ExpenseHistoryResult = {
   raw: ExpenseRecord[];
-  monthly: MonthlyExpense[];
+  range: ExpenseByRange[];
 };
 
-function processExpenseData(data: ExpenseRecord[]): MonthlyExpense[] {
+function processExpenseData(
+  data: ExpenseRecord[],
+  range: rangeProps['range']
+): ExpenseByRange[] {
   // 用一个 Map 存储按 'yyyy-MM' 格式分组的收入总和
   const grouped = new Map<string, number>();
 
   data.forEach((item) => {
     const dateObj = parseISO(item.date);
-    const yearMonth = format(dateObj, 'yyyy-MM'); // 用于排序的key
-    grouped.set(yearMonth, (grouped.get(yearMonth) || 0) + item.amount);
+    // ✅ 按不同粒度格式化
+    const key =
+      range === 'week'
+        ? format(dateObj, 'yyyy-MM-dd') // 每天一个 key
+        : format(dateObj, 'yyyy-MM'); // 每月一个 key
+
+    grouped.set(key, (grouped.get(key) || 0) + item.amount);
   });
 
   // 按 'yyyy-MM' 进行升序排序
@@ -36,10 +44,13 @@ function processExpenseData(data: ExpenseRecord[]): MonthlyExpense[] {
   );
 
   // 返回只包含 MMM 和 total 的数组
-  return sortedEntries.map(([yearMonth, total]) => {
-    const dateObj = parseISO(yearMonth + '-01'); // 构造一个日期对象方便格式化
+  return sortedEntries.map(([dateKey, total]) => {
+    const dateObj = parseISO(dateKey + (range === 'week' ? '' : '-01'));
     return {
-      month: format(dateObj, 'MMM'), // 只显示月份缩写
+      range:
+        range === 'week'
+          ? format(dateObj, 'EEE').toUpperCase()
+          : format(dateObj, 'MMM'),
       total: Number(total.toFixed(2)),
     };
   });
@@ -63,8 +74,8 @@ export function useGetExpenseHistory({ range }: rangeProps) {
       const json = await res.json();
       if (!res.ok) throw new Error(json.message);
       const rawData: ExpenseRecord[] = json.data;
-      const monthly = processExpenseData(rawData);
-      return { raw: rawData, monthly };
+      const rangeDetail = processExpenseData(rawData, range);
+      return { raw: rawData, range: rangeDetail };
     },
   });
 }
