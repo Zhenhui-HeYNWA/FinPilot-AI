@@ -14,6 +14,7 @@ import AddNewRecord from '@/components/AddNewRecord';
 import DashboardPage from '@/components/DashboardPage';
 import RecordChart from '@/components/RecordChart';
 import GenerateMockButton from '@/components/ui/generateMockButton';
+import RecentRecords from '@/components/recordTable/RecentRecords';
 
 const Record = () => {
   return (
@@ -22,8 +23,12 @@ const Record = () => {
 
       <div className='w-full flex flex-col md:flex-row  gap-4'>
         <RecordChart />
-        <AddNewRecord />
+
         {/* <GenerateMockButton clerkId='user_2wwCzlxRjBcJf0KvPU9jP0E5hpl' /> */}
+      </div>
+      <div className='w-full flex flex-col md:flex-row  gap-4'>
+        <AddNewRecord />
+        <RecentRecords />
       </div>
     </div>
   );

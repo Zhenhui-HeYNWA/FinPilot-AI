@@ -22,6 +22,7 @@ import {
   BadgeDollarSign,
   SquareActivity,
   BookmarkPlus,
+  Receipt,
 } from 'lucide-react';
 
 export const RecordCategory: Record<RecordType, CategoryOption[]> = {
@@ -31,7 +32,7 @@ export const RecordCategory: Record<RecordType, CategoryOption[]> = {
     { label: 'Transport', value: 'transport', icon: Bus },
     { label: 'Entertainment', value: 'entertainment', icon: Drama },
     { label: 'Housing', value: 'housing', icon: Home },
-    { label: 'Bill', value: 'bill', icon: ReceiptText },
+    { label: 'Bill', value: 'bill', icon: Receipt },
     { label: 'Health', value: 'health', icon: Heart },
     { label: 'Education', value: 'education', icon: Book },
     { label: 'Other', value: 'other', icon: BookmarkMinus },
@@ -45,3 +46,25 @@ export const RecordCategory: Record<RecordType, CategoryOption[]> = {
     { label: 'Other', value: 'other', icon: BookmarkPlus },
   ],
 };
+
+export const recordTypeOptions = [
+  { label: 'Income', value: 'income' },
+  { label: 'Expense', value: 'expense' },
+];
+export const categoryOptions = [
+  { label: 'Salary', value: 'salary', icon: Banknote },
+  { label: 'Bonus', value: 'bonus', icon: BadgeDollarSign },
+  { label: 'Investment', value: 'investment', icon: SquareActivity },
+  { label: 'Gift', value: 'gift', icon: Gift },
+  { label: 'Refund', value: 'refund', icon: ReceiptText },
+
+  { label: 'Food', value: 'food', icon: Utensils },
+  { label: 'Shopping', value: 'shopping', icon: ShoppingCart },
+  { label: 'Transport', value: 'transport', icon: Bus },
+  { label: 'Entertainment', value: 'entertainment', icon: Drama },
+  { label: 'Housing', value: 'housing', icon: Home },
+  { label: 'Bill', value: 'bill', icon: Receipt },
+  { label: 'Health', value: 'health', icon: Heart },
+  { label: 'Education', value: 'education', icon: Book },
+  { label: 'Other', value: 'other', icon: BookmarkMinus },
+];
