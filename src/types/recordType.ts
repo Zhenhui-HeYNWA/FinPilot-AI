@@ -68,3 +68,14 @@ export const categoryOptions = [
   { label: 'Education', value: 'education', icon: Book },
   { label: 'Other', value: 'other', icon: BookmarkMinus },
 ];
+
+export type RecordProps = {
+  id: string;
+  userId: string;
+  recordType: string;
+  amount: number;
+  category: string;
+  description?: string;
+  date: string;
+  createdAt: string;
+};

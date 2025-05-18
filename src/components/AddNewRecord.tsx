@@ -42,7 +42,7 @@ import { RecordCategory, RecordType } from '@/types/recordType';
 import { formSchema } from '@/lib/zod/validation';
 
 import { useCreateRecord } from '@/hooks/useRecord';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import { useQueryClient } from '@tanstack/react-query';
 
 export default function AddNewRecord() {
@@ -255,13 +255,12 @@ export default function AddNewRecord() {
 
           <Button
             type='submit'
-            className='w-full font-bold'>
+            className='w-full font-bold '>
             Add a new record
           </Button>
         </form>
       </Form>
-      <CardFooter />
-      <Toaster />
+      <CardFooter className='mt-4' />
     </Card>
   );
 }

@@ -6,20 +6,18 @@ export async function GET() {
   const { userId } = await auth();
 
   if (!userId) return new Response('Unauthorized', { status: 401 });
-  console.log('userId', userId);
 
   const records = await prisma.record.findMany({
     where: { userId },
     select: { recordType: true, amount: true },
   });
-  console.log('records', records);
+
   const result = await prisma.record.aggregate({
     where: { userId, recordType: 'income' },
     _sum: {
       amount: true,
     },
   });
-  console.log('result', result);
 
   return NextResponse.json({ totalIncome: result._sum.amount || 0 });
 }

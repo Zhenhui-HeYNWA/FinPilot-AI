@@ -10,7 +10,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { Column } from '@tanstack/react-table';
-import { X } from 'lucide-react';
+import { CalendarSearch, X } from 'lucide-react';
 
 interface DataTableDateRangeFilterProps<TData> {
   column?: Column<TData, unknown>;
@@ -50,7 +50,8 @@ export function DataTableDateRangeFilter<TData>({
         <Button
           variant='outline'
           size='sm'
-          className='h-8 border-dashed  justify-start text-left'>
+          className='h-8 border-dashed  justify-center text-center'>
+          <CalendarSearch />
           {displayLabel}
         </Button>
       </PopoverTrigger>

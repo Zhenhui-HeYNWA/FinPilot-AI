@@ -58,8 +58,6 @@ const RecordChart = () => {
   const { data: expenseQuery, isLoading: isExpenseLoading } =
     useGetExpenseHistory({ range: '6months' });
 
-  console.log('income', incomeQuery, 'expense', expenseQuery);
-
   const rowData = incomeQuery?.range.map((item) => {
     const matchingExpense = expenseQuery?.range.find(
       (e) => e.range === item.range

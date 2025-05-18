@@ -23,7 +23,7 @@ import { Button } from '../ui/button';
 import { useState } from 'react';
 import { Input } from '../ui/input';
 
-import { X } from 'lucide-react';
+import { ArrowBigLeft, ArrowLeft, ArrowRight, X } from 'lucide-react';
 import { categoryOptions, recordTypeOptions } from '@/types/recordType';
 import { DataTableDateRangeFilter } from './data-table-date-filter';
 import { DataTableFacetedFilter } from './data-table-faceted-filter';
@@ -39,7 +39,7 @@ export function DataTable<TData extends Record<string, any>, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [pagination, setPagination] = useState({
     pageIndex: 0,
-    pageSize: 7,
+    pageSize: 6,
   });
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState('');
@@ -83,7 +83,7 @@ export function DataTable<TData extends Record<string, any>, TValue>({
           onChange={(e) => setGlobalFilter(e.target.value)}
           className='max-w-xl'
         />
-        <div className='flex gap-4'>
+        <div className=' sm:flex gap-4 grid grid-cols-1'>
           {table.getColumn('category') && (
             <DataTableFacetedFilter
               column={table.getColumn('category')}
@@ -172,10 +172,11 @@ export function DataTable<TData extends Record<string, any>, TValue>({
           variant='outline'
           size='sm'
           onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}>
-          Previous
+          disabled={!table.getCanPreviousPage()}
+          className='flex items-center justify-center cursor-pointer'>
+          <ArrowLeft className=' h-4 w-4' />
         </Button>
-        <span>
+        <span className='mx-2 w-24 text-center'>
           Page {table.getState().pagination.pageIndex + 1} of{' '}
           {table.getPageCount()}
         </span>
@@ -183,8 +184,9 @@ export function DataTable<TData extends Record<string, any>, TValue>({
           variant='outline'
           size='sm'
           onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}>
-          Next
+          disabled={!table.getCanNextPage()}
+          className='flex items-center justify-center cursor-pointer'>
+          <ArrowRight className=' h-4 w-4' />
         </Button>
       </div>
     </div>

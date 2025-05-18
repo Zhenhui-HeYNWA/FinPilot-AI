@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import { auth } from '@clerk/nextjs/server';
+import { NextResponse } from 'next/server';
 
 export async function GET() {
   const { userId } = await auth();
@@ -13,8 +14,6 @@ export async function GET() {
 
   return Response.json(records);
 }
-
-import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
   try {
@@ -48,6 +47,57 @@ export async function POST(req: Request) {
     return NextResponse.json(newRecord);
   } catch (err) {
     console.error('❌ Error creating record:', err);
+    return new Response('Internal Server Error', { status: 500 });
+  }
+}
+
+export async function PUT(req: Request) {
+  const { userId } = await auth();
+  if (!userId) return new Response('Unauthorized', { status: 401 });
+  const { searchParams } = new URL(req.url);
+  console.log('searchParams', searchParams);
+  const recordId = searchParams.get('recordId');
+  if (!recordId) return new Response('Record ID is required', { status: 400 });
+
+  try {
+    const data = await req.json();
+
+    const updatedRecord = await prisma.record.update({
+      where: { id: recordId },
+      data: {
+        ...data,
+      },
+    });
+
+    return NextResponse.json(updatedRecord);
+  } catch (error) {
+    console.error('Error updating record:', error);
+    return new Response('Internal Server Error', { status: 500 });
+  }
+}
+
+export async function DELETE(req: Request) {
+  const { userId } = await auth();
+
+  if (!userId) return new Response('Unauthorized', { status: 401 });
+
+  const { searchParams } = new URL(req.url);
+
+  const recordId = searchParams.get('recordId');
+
+  if (!recordId) return new Response('Record ID is required', { status: 400 });
+
+  try {
+    const deleteREcord = await prisma.record.delete({
+      where: {
+        userId,
+        id: recordId,
+      },
+    });
+
+    return NextResponse.json({ data: deleteREcord });
+  } catch (error) {
+    console.error('Error deleting record:', error);
     return new Response('Internal Server Error', { status: 500 });
   }
 }

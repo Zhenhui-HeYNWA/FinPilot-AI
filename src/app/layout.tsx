@@ -6,6 +6,7 @@ import Nav from '@/components/nav/nav';
 
 import UserSyncClient from '@/components/UserSyncClient';
 import Providers from './provider/provider';
+import { Toaster } from 'react-hot-toast';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -35,6 +36,10 @@ export default function RootLayout({
           <Nav />
           <UserSyncClient />
           {children}
+          <Toaster
+            position='bottom-center'
+            reverseOrder={false}
+          />
         </Providers>
       </body>
     </html>

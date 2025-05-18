@@ -13,8 +13,10 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { RecordCategory } from '@/types/recordType';
+import DataTableRowActions from './data-table-row-action';
 
 export type Record = {
+  id: string;
   userId: string;
   recordType: string;
   amount: number;
@@ -23,19 +25,6 @@ export type Record = {
   date: string;
   createdAt: string;
 };
-
-const recordTypeOptions = [
-  {
-    label: 'Expense',
-    value: 'expense',
-    icon: undefined, // 或者你可以添加自定义图标
-  },
-  {
-    label: 'Income',
-    value: 'income',
-    icon: undefined,
-  },
-];
 
 const dateRangeFilterFn: FilterFn<any> = (row, columnId, filterValue) => {
   if (!filterValue || !filterValue.from || !filterValue.to) return true;
@@ -160,32 +149,7 @@ export const columns: ColumnDef<Record>[] = [
     cell: ({ row }) => {
       const record = row.original;
 
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant='ghost'
-              className='h-8 w-8 p-0'>
-              <MoreHorizontal className='h-4 w-4' />
-              <span className='sr-only'>Open menu</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align='end'>
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className='cursor-pointer'>
-              <Settings />
-              Edit
-            </DropdownMenuItem>
-            <DropdownMenuItem className='cursor-pointer'>
-              <Trash2 />
-              Delete
-            </DropdownMenuItem>
-
-            {/* TODO:add the export record  */}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
+      return <DataTableRowActions record={record} />;
     },
   },
 ];

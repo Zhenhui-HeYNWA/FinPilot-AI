@@ -28,6 +28,40 @@ export async function createRecord(data: z.infer<typeof formSchema>) {
   return res.json();
 }
 
+export async function updateRecord({
+  data,
+  recordId,
+}: {
+  data: z.infer<typeof formSchema>;
+  recordId: string;
+}) {
+  const res = await fetch(`/api/records?recordId=${recordId}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  console.log('Response status:', res.status);
+  if (!res.ok) {
+    const error = await res.text();
+    console.error('API Error:', error);
+    throw new Error('Failed to create record');
+  }
+  return res.json();
+}
+
+export async function deleteRecord(recordId: string) {
+  const res = await fetch(`/api/records?recordId=${recordId}`, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ recordId }),
+  });
+
+  if (!res.ok) {
+    throw new Error('Failed to delete record');
+  }
+  return res.json();
+}
+
 export async function getRecordsByRange({
   from,
   to,

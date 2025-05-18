@@ -76,9 +76,7 @@ export function AreaChartComponent({ type }: AreaChartComponentProps) {
       };
     });
   }, [incomeQuery.data, expenseQuery.data, type]);
-  // const savingsQuery = useGetSavingsHistory({ range });
-  console.log('incomeData', incomeQuery.data);
-  // 根据 type 选择对应的数据
+
   let selectedQuery;
   switch (type) {
     case 'income':
@@ -111,9 +109,15 @@ export function AreaChartComponent({ type }: AreaChartComponentProps) {
     const values = data?.range?.map((d) => Number(d.total)) ?? [];
     const max = Math.max(...values, 0);
     const min = Math.min(...values, 0);
-    const padding = (max - min) * 0.1 || 10; // 最少给 10 的 buffer
+    const padding = (max - min) * 0.19 || 10;
 
-    return [Math.floor(min - padding), Math.ceil(max + padding)];
+    const minWithPadding = min - padding;
+    const maxWithPadding = max + padding;
+
+    return [
+      min < 0 ? Math.floor(minWithPadding) : 0,
+      Math.ceil(maxWithPadding),
+    ];
   }, [data]);
   return (
     <div className='space-y-4'>
@@ -136,15 +140,16 @@ export function AreaChartComponent({ type }: AreaChartComponentProps) {
 
       {/* 图表区域 */}
       {isLoading ? (
-        <Skeleton className='w-full h-48' />
+        <Skeleton className='w-full' />
       ) : (
         <ChartContainer
           config={chartConfigMap}
           className='mt-4 w-full '>
           <AreaChart
+            className='w-full'
             accessibilityLayer
             data={data?.range || []}
-            margin={{ left: 12, right: 0 }}
+            margin={{ left: -30, right: 0 }}
             height={400}>
             <CartesianGrid
               vertical={false}
@@ -158,10 +163,18 @@ export function AreaChartComponent({ type }: AreaChartComponentProps) {
               fontSize={12}
             />
             <YAxis
-              hide
+              hide={false} // 显示 Y 轴
               domain={yDomain}
               tickLine={false}
               axisLine={false}
+              stroke='#888888'
+              fontSize={8}
+              tickFormatter={(value) => {
+                if (value >= 1_000_000)
+                  return `${(value / 1_000_000).toFixed(1)}M`;
+                if (value >= 1_000) return `${(value / 1_000).toFixed(1)}K`;
+                return value.toString();
+              }}
             />
 
             <ChartTooltip

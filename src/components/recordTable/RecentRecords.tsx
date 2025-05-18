@@ -29,7 +29,7 @@ const RecentRecords = () => {
           You have {RecordData?.data?.length} records.
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className='pb-0'>
         {isLoading ? (
           <div>
             <DataTableSkeleton />
