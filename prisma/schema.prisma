@@ -14,13 +14,14 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  clerkId   String   @unique
-  email     String   @unique
-  name      String?
-  lastLogin DateTime
-  createdAt DateTime @default(now())
-  records   Record[]
+  id           String        @id @default(cuid())
+  clerkId      String        @unique
+  email        String        @unique
+  name         String?
+  lastLogin    DateTime
+  createdAt    DateTime      @default(now())
+  records      Record[]
+  savingsGoals SavingsGoal[]
 }
 
 model Record {
@@ -33,4 +34,30 @@ model Record {
   category    String
   date        DateTime
   createdAt   DateTime @default(now())
+}
+
+model SavingsGoal {
+  id                  String               @id @default(cuid())
+  userId              String               @unique
+  user                User                 @relation(fields: [userId], references: [clerkId])
+  savingsGoalName     String
+  targetAmount        Float
+  currentAmount       Float
+  monthlyContribution Float
+  annualInterestRate  Float
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  isCompleted         Boolean              @default(false)
+  targetDate          DateTime?
+  lastSavingsDate     DateTime             @default(now())
+  SavingsGoalHistory  SavingsGoalHistory[]
+}
+
+model SavingsGoalHistory {
+  id            String      @id @default(cuid())
+  savingsGoalId String
+  savingsGoal   SavingsGoal @relation(fields: [savingsGoalId], references: [id])
+  amountSaved   Float
+  savedAt       DateTime    @default(now())
+  note          String?
 }

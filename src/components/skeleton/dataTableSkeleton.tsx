@@ -11,8 +11,8 @@ const DataTableSkeleton = () => {
         <Skeleton className='w-24 h-8' />
       </div>
 
-      <div className='flex gap-4 mt-2'>
-        <Skeleton className='w-full h-[30rem]' />
+      <div className='flex gap-4 mt-2 pb-4 '>
+        <Skeleton className='w-full h-[25rem] ' />
       </div>
     </div>
   );

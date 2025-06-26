@@ -52,14 +52,15 @@ export async function POST(req: Request) {
 }
 
 export async function PUT(req: Request) {
-  const { userId } = await auth();
-  if (!userId) return new Response('Unauthorized', { status: 401 });
-  const { searchParams } = new URL(req.url);
-  console.log('searchParams', searchParams);
-  const recordId = searchParams.get('recordId');
-  if (!recordId) return new Response('Record ID is required', { status: 400 });
-
   try {
+    const { userId } = await auth();
+    if (!userId) return new Response('Unauthorized', { status: 401 });
+    const { searchParams } = new URL(req.url);
+    console.log('searchParams', searchParams);
+    const recordId = searchParams.get('recordId');
+    if (!recordId)
+      return new Response('Record ID is required', { status: 400 });
+
     const data = await req.json();
 
     const updatedRecord = await prisma.record.update({

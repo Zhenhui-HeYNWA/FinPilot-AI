@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { formSchema } from '@/lib/zod/validation';
+import { recordFormSchema } from '@/lib/zod/validation';
 
 type GetRecordsByRangeProps = {
   from: string;
@@ -15,7 +15,7 @@ export async function getRecords() {
   return res.json();
 }
 
-export async function createRecord(data: z.infer<typeof formSchema>) {
+export async function createRecord(data: z.infer<typeof recordFormSchema>) {
   const res = await fetch('/api/records', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -32,7 +32,7 @@ export async function updateRecord({
   data,
   recordId,
 }: {
-  data: z.infer<typeof formSchema>;
+  data: z.infer<typeof recordFormSchema>;
   recordId: string;
 }) {
   const res = await fetch(`/api/records?recordId=${recordId}`, {
@@ -42,8 +42,6 @@ export async function updateRecord({
   });
   console.log('Response status:', res.status);
   if (!res.ok) {
-    const error = await res.text();
-    console.error('API Error:', error);
     throw new Error('Failed to create record');
   }
   return res.json();

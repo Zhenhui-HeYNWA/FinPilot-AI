@@ -1,7 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import * as api from '@/lib/api/record';
-import { z } from 'zod';
-import { formSchema } from '@/lib/zod/validation';
+
 import toast from 'react-hot-toast';
 type GetRecordsByRangeProps = {
   from: string;
@@ -25,22 +24,38 @@ export function useCreateRecord() {
 export function useUpdateRecord() {
   const queryClient = useQueryClient();
 
-  const mutation = useMutation({
+  return useMutation({
     mutationFn: api.updateRecord,
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['records'] });
       queryClient.invalidateQueries({ queryKey: ['incomeByRange'] });
       queryClient.invalidateQueries({ queryKey: ['expenseByRange'] });
       queryClient.invalidateQueries({ queryKey: ['income'] });
       queryClient.invalidateQueries({ queryKey: ['expense'] });
-      toast.success('Record updated successfully');
+      toast.success('Record Update Successfully');
+      console.log('Update success', data);
+    },
+    onError: (error) => {
+      toast.error('update filed');
+      console.log('Update success', error);
     },
   });
 
-  return {
-    updateRecord: mutation.mutate,
-    isPending: mutation.isPending, // 或 mutation.isLoading
-  };
+  // const mutation = useMutation({
+  //   mutationFn: api.updateRecord,
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries({ queryKey: ['records'] });
+  //     queryClient.invalidateQueries({ queryKey: ['incomeByRange'] });
+  //     queryClient.invalidateQueries({ queryKey: ['expenseByRange'] });
+  //     queryClient.invalidateQueries({ queryKey: ['income'] });
+  //     queryClient.invalidateQueries({ queryKey: ['expense'] });
+  //   },
+  // });
+
+  // return {
+  //   updateRecord: mutation.mutate,
+  //   isPending: mutation.isPending, // 或 mutation.isLoading
+  // };
 }
 
 export function useDeleteRecord() {

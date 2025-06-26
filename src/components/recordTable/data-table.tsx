@@ -27,6 +27,7 @@ import { ArrowBigLeft, ArrowLeft, ArrowRight, X } from 'lucide-react';
 import { categoryOptions, recordTypeOptions } from '@/types/recordType';
 import { DataTableDateRangeFilter } from './data-table-date-filter';
 import { DataTableFacetedFilter } from './data-table-faceted-filter';
+import { CardFooter } from '../ui/card';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -167,7 +168,8 @@ export function DataTable<TData extends Record<string, any>, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className='flex items-center justify-end space-x-2 py-4'>
+
+      <CardFooter className='flex items-center justify-end space-x-2 py-4 '>
         <Button
           variant='outline'
           size='sm'
@@ -188,7 +190,7 @@ export function DataTable<TData extends Record<string, any>, TValue>({
           className='flex items-center justify-center cursor-pointer'>
           <ArrowRight className=' h-4 w-4' />
         </Button>
-      </div>
+      </CardFooter>
     </div>
   );
 }

@@ -30,21 +30,23 @@ import { z } from 'zod';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { CalendarIcon, Minus, Plus } from 'lucide-react';
 import { Calendar } from '../ui/calendar';
-import { format } from 'date-fns';
+import { format, isEqual } from 'date-fns';
 import { cn } from '@/lib/utils';
 
 import { DialogClose } from '../ui/dialog';
 import toast from 'react-hot-toast';
 import { useUpdateRecord } from '@/hooks/useRecord';
+import { useQueryClient } from '@tanstack/react-query';
 type Props = {
   record: RecordProps;
 };
 const EditRecord = ({ record }: Props) => {
   const [recordType, setRecordType] = useState(record.recordType as RecordType);
 
-  const { updateRecord, isPending } = useUpdateRecord();
+  const updateRecord = useUpdateRecord();
 
   const categoryOptions = RecordCategory[recordType];
+  const queryClient = useQueryClient();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -56,24 +58,33 @@ const EditRecord = ({ record }: Props) => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    updateRecord(
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    // const originalData = {
+    //   // 假设 record 就是原始数据，你可以根据需要调整字段
+    //   ...record,
+    // };
+
+    // if (isEqual(values, originalData)) {
+    //   toast.error('No changes made');
+    //   return;
+    // }
+
+    updateRecord.mutate(
       {
         data: values,
         recordId: record.id,
       },
-
       {
         onSuccess: () => {
-          toast.success('Record updated successfully');
+          toast.success('Record updated');
+          // 你可以在这里做 reset、跳转等
         },
         onError: () => {
           toast.error('Failed to update record');
         },
       }
     );
-  };
-
+  }
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -133,8 +144,8 @@ const EditRecord = ({ record }: Props) => {
           control={form.control}
           name='amount'
           render={({ field }) => (
-            <FormItem>
-              <FormLabel className='mt-2'>Amount ($)</FormLabel>
+            <FormItem className='mt-1'>
+              <FormLabel>Amount ($)</FormLabel>
               <FormControl>
                 <Input
                   {...field}

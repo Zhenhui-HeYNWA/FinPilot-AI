@@ -105,7 +105,7 @@ export const columns: ColumnDef<Record>[] = [
       ) as keyof typeof RecordCategory;
       return (
         <div
-          className={`w-20  border rounded-2xl py-1  px-4 flex justify-center items-center ${recordType === 'expense' && 'bg-gray-200'} `}>
+          className={`w-20  border rounded-2xl py-1  px-4 flex justify-center items-center ${recordType === 'expense' && 'bg-gray-100'} `}>
           <span
             className={`capitalize 
     ${recordType === 'expense' ? 'text-[#ae1919] ' : 'text-[#2aae19]'}`}>

@@ -28,28 +28,34 @@ const chartConfig = {
 };
 
 export function SavingsBarChart({ data, monthsToGoal }: SavingsBarChartProps) {
+  console.log('SavingsBarChart data:', data);
   const chartEmpty = data.length === 0;
 
   return (
-    <Card className='md:max-w-[500px] max-w-[450px] '>
+    <Card className='flex-1'>
       <CardHeader>
-        <CardTitle>Savings Projection</CardTitle>
+        <CardTitle className='text-xl font-bold'>Savings Projection</CardTitle>
         <CardDescription>
           See how your savings will grow over time
         </CardDescription>
       </CardHeader>
 
-      <CardContent className='h-[450px]'>
+      <CardContent className=' px-6 py-0'>
         {chartEmpty ? (
           <div className='flex items-center justify-center h-full text-center text-muted-foreground'>
-            {monthsToGoal === Number.POSITIVE_INFINITY
-              ? 'Increase your monthly contribution to see projection'
-              : "You've already reached your goal!"}
+            {monthsToGoal === Number.POSITIVE_INFINITY ? (
+              'Increase your monthly contribution to see projection'
+            ) : (
+              <span className='flex items-center justify-center h-96 '>
+                No data available. Adjust your savings or contributions to see
+                the projection.
+              </span>
+            )}
           </div>
         ) : (
           <ChartContainer
             config={chartConfig}
-            className='h-full  md:max-w-[450px] max-w-[300px]'>
+            className='h-full w-full'>
             <BarChart data={data}>
               <CartesianGrid strokeDasharray='3 3' />
               <XAxis
@@ -60,15 +66,15 @@ export function SavingsBarChart({ data, monthsToGoal }: SavingsBarChartProps) {
                 label={{
                   value: 'Months',
                   position: 'insideBottom',
-                  offset: -5,
+                  offset: -4,
                 }}
               />
               <YAxis
-                tickFormatter={(value) => `$${value}`}
-                label={{
-                  value: 'Savings ($)',
-                  angle: -90,
-                  position: 'insideLeft',
+                tickFormatter={(value) => {
+                  if (value > 1000) {
+                    return `${(value / 1000).toFixed(1)}k`;
+                  }
+                  return value;
                 }}
               />
               <ChartTooltip
@@ -85,7 +91,7 @@ export function SavingsBarChart({ data, monthsToGoal }: SavingsBarChartProps) {
         )}
       </CardContent>
 
-      <CardFooter>
+      <CardFooter className='flex py-4 justify-center'>
         <p className='text-sm text-muted-foreground'>
           Adjust your goal, savings, and contributions to see how it affects
           your timeline

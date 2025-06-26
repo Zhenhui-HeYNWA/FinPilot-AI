@@ -39,7 +39,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { RecordCategory, RecordType } from '@/types/recordType';
-import { formSchema } from '@/lib/zod/validation';
+import { recordFormSchema } from '@/lib/zod/validation';
 
 import { useCreateRecord } from '@/hooks/useRecord';
 import toast from 'react-hot-toast';
@@ -50,8 +50,8 @@ export default function AddNewRecord() {
   const createRecord = useCreateRecord();
   const [recordType, setRecordType] = useState<RecordType>('income');
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof recordFormSchema>>({
+    resolver: zodResolver(recordFormSchema),
     defaultValues: {
       recordType: 'income',
       amount: 0,
@@ -63,7 +63,7 @@ export default function AddNewRecord() {
 
   const categoryOptions = RecordCategory[recordType];
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof recordFormSchema>) {
     createRecord.mutate(values, {
       onSuccess: async (data) => {
         toast.success('Record created successfully');
